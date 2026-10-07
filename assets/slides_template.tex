@@ -1,0 +1,274 @@
+% Beamer slides template (beamer-slides skill). Compile twice with pdflatex from the folder that holds figures/.
+% Keep the preamble; replace the frames. Every frame title states its takeaway as a sentence, and every content frame
+% ends with \takeaway{}. Layout patterns are numbered as in SKILL.md.
+\documentclass[aspectratio=169,10pt]{beamer}
+\usetheme{Singapore}
+\usepackage{booktabs,array,graphicx}
+\graphicspath{{figures/}}
+\setbeamertemplate{frametitle}[default][left]
+\setbeamerfont{frametitle}{series=\bfseries,size=\large}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{itemize items}[circle]
+\setbeamertemplate{enumerate items}[default]
+\setbeamertemplate{footline}{\hbox to \paperwidth{\hfill\scriptsize\color{gray}%
+  \insertframenumber\,/\,\inserttotalframenumber\hspace*{1em}}\vspace{0.6em}}
+\setbeamercolor{block body}{bg=structure.fg!8}
+\newcommand{\takeaway}[1]{\vfill\begin{beamercolorbox}[sep=5pt]{block body}\small\textbf{Takeaway:} #1\end{beamercolorbox}}
+\newcommand{\citeg}[1]{\textcolor{gray}{(#1)}}
+
+% Template only: draws a framed placeholder when figures/<file> does not exist yet. Delete once real figures are in place
+% and use \includegraphics[width=...]{file.pdf} directly.
+\newcommand{\figph}[2][\linewidth]{\IfFileExists{figures/#2}{\includegraphics[width=#1]{#2}}%
+  {\fbox{\parbox[c][0.36\textheight][c]{\dimexpr#1-2\fboxsep-2\fboxrule\relax}{\centering\scriptsize\color{gray}%
+  figure: \detokenize{#2}}}}}
+
+\title{Meeting Agenda}
+\subtitle{Paper Title in Title Case\\ Second Line If Needed}
+\author{First Author \and Second Author}
+\institute{University}
+\date{Advisor meeting, Month Year}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+% -----------------------------------------------------------------------------
+\section{Motivation}
+
+\begin{frame}{The debate blames X for rising Y; the evidence compares states, not shocks}
+\begin{itemize}
+\item Why the question matters, in one line, with the number that makes it matter
+\item What the evidence does now:
+  \begin{itemize}
+  \item Finding of the closest paper, with its size \citeg{Author \& Author, 2019}
+  \item The finding that disagrees, and why \citeg{Author, 2025}
+  \end{itemize}
+\item Our question: when X moves for reasons nobody controls, how much reaches Y, through which channel, and how fast?
+\end{itemize}
+\takeaway{the same change in X can raise or lower Y; which way depends on the institution.}
+\end{frame}
+
+\begin{frame}{X reaches Y through two channels that move on different clocks}
+\[
+Y = \underbrace{F}_{\text{fast component}} + C + \underbrace{s \cdot K}_{\text{slow component}}
+\]
+\vspace{-0.4em}
+{\centering\scriptsize Accounting identity \citeg{Author, 1961}\par}
+\vspace{0.3em}
+% Pattern 5: contrast of two mechanisms
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\begin{beamercolorbox}[sep=5pt]{block body}
+\textbf{Fast: channel A}\\[2pt]
+\small Passes through every month, with a later correction of over- and under-collection.
+\end{beamercolorbox}
+\end{column}
+\begin{column}{0.48\textwidth}
+\begin{beamercolorbox}[sep=5pt]{block body}
+\textbf{Slow: channel B}\\[2pt]
+\small Changes only at discrete reviews, every few years.
+\end{beamercolorbox}
+\end{column}
+\end{columns}
+\vspace{0.5em}
+\begin{itemize}\small
+\item Define every abbreviation at first use, for example balancing authority (BA)
+\end{itemize}
+\takeaway{which channel carries the shock decides how fast and how fully it reaches Y.}
+\end{frame}
+
+% Pattern 6: literature and contribution
+\begin{frame}{Contribution: the margin is institutional, measured month by month}
+\small
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{4.4cm}>{\raggedright\arraybackslash}p{4.2cm}>{\raggedright\arraybackslash}p{4.4cm}@{}}
+\toprule
+Literature & What it does & What we add \\
+\midrule
+Strand one \citeg{Author \& Author; Author} & Cross-state, policy as treatment & Within-unit, quasi-random shocks \\
+Strand two \citeg{Author \& Author, 2014} & Wholesale markets & Retail, through regulation \\
+Strand three \citeg{Author, 2017} & Simulations & Monthly evidence \\
+\bottomrule
+\end{tabular}
+\takeaway{one sentence on what is new relative to all three strands.}
+\end{frame}
+
+% -----------------------------------------------------------------------------
+\section{Design}
+
+\begin{frame}{Identification: within a unit-year, months with an unusually large shock}
+\begin{itemize}
+\item \textbf{Shock:} $Z_{bt}$ = predicted deviation from the calendar-month norm\\
+  {\small one line on how it is built and what it is scaled by}
+\item \textbf{Estimating equation:} $y_{it} = \beta X_{it} + W'\gamma + \alpha_{i\times y} + \alpha_{i\times m} + \delta_t +
+  \varepsilon_{it}$, $X$ instrumented by $Z$
+\item \textbf{Sample:} source, units, years
+\item \textbf{Exclusion checks:} $Z$ does not predict demand, weather controls or placebo outcomes; leads $\approx 0$
+\item \textbf{Inference:} clustered by region, plus wild-cluster bootstrap \citeg{Roodman et al., 2019}
+\end{itemize}
+\takeaway{the shock is the experiment; the fixed effects remove levels, seasonality and common monthly shocks.}
+\end{frame}
+
+% -----------------------------------------------------------------------------
+\section{Results}
+
+% Pattern 1: table + bullets
+\begin{frame}{Treated prices rise with the shock; the comparison group does not respond}
+\begin{columns}[T]
+\begin{column}{0.56\textwidth}
+\footnotesize
+\resizebox{\linewidth}{!}{\begin{tabular}{@{}lccc@{}}
+\toprule
+2SLS, per unit of the shock & Est. & SE & Clusters \\
+\midrule
+\multicolumn{4}{@{}l}{\textit{Outcome (units)}}\\
+Treated group & 0.050 & 0.019 & 25 \\
+\quad wild bootstrap $p$ & \multicolumn{3}{c}{0.021} \\
+Comparison group & 0.002 & 0.016 & 32 \\
+Difference (pooled) & 0.048 & & $p<0.001$ \\
+\addlinespace
+\multicolumn{4}{@{}l}{\textit{Robustness, treated group}}\\
+Drop any one cluster & \multicolumn{3}{c}{0.037--0.074} \\
+Alternative controls & \multicolumn{3}{c}{0.049} \\
+\bottomrule
+\end{tabular}}
+\end{column}
+\begin{column}{0.42\textwidth}
+\small
+\begin{itemize}
+\item Typical shock: $+0.044$ units, $+0.45\%$
+\item Where the effect comes from, with its estimate and $F$
+\item The check a skeptic asks first, and its result
+\end{itemize}
+\end{column}
+\end{columns}
+\takeaway{a positive, robust response that exists only where the institution exists.}
+\end{frame}
+
+% Pattern 2: full-width figure
+\begin{frame}{The response builds one to four months after the shock}
+\centering
+\figph[0.92\textwidth]{fig_lag_profile.pdf}
+
+\raggedright
+\scriptsize Reduced form: outcome on $Z$ at lags 0--12 with weather controls; unit $\times$ year, unit $\times$ calendar-month
+and year-month effects; 95\% CIs clustered by region.
+\takeaway{the timing matches monthly and quarterly updating of the fast channel.}
+\end{frame}
+
+% Pattern 3: figure + bullets
+\begin{frame}{Event study: no pre-trend, and the effect persists for two years}
+\begin{columns}[T]
+\begin{column}{0.58\textwidth}
+\centering
+\figph{fig_event_study.pdf}
+
+\raggedright\scriptsize Estimator; sample; control group; 95\% CIs clustered by state.
+\end{column}
+\begin{column}{0.40\textwidth}
+\small
+\begin{itemize}
+\item Average effect: $-4.4$ (s.e.\ 1.5)
+\item Pre-period coefficients near zero
+\item What the shape implies for the mechanism
+\end{itemize}
+\end{column}
+\end{columns}
+\takeaway{the effect starts at treatment and does not fade within the window.}
+\end{frame}
+
+% -----------------------------------------------------------------------------
+\section{Robustness}
+
+% Pattern 8: problem / solution
+\begin{frame}{Two-way fixed effects flip the sign under staggered timing}
+\begin{columns}[T]
+\begin{column}{0.50\textwidth}
+\small
+\textbf{The problem}
+\begin{itemize}
+\item Treatment arrives at different dates and its effect changes over time
+\item Two-way fixed effects use already-treated units as controls; weights can be negative \citeg{Goodman-Bacon, 2021}
+\end{itemize}
+\end{column}
+\begin{column}{0.48\textwidth}
+\small
+\textbf{Why the chosen estimator fits}
+\begin{itemize}
+\item Each cohort compared only with never- or not-yet-treated units \citeg{Callaway \& Sant'Anna, 2021}
+\item Other estimators reported as checks
+\end{itemize}
+\end{column}
+\end{columns}
+\takeaway{clean comparisons and explicit aggregation are what a staggered, dynamic policy requires.}
+\end{frame}
+
+% Pattern 4: figure + small table below
+\begin{frame}{The size of the decline depends on the base period, not on the estimator}
+\centering
+\figph[0.68\linewidth]{fig_estimators.pdf}
+\vspace{-4pt}
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\scriptsize
+\begin{tabular}{@{}lc@{}}
+\toprule
+Average of quarters 3--12 & Effect \\
+\midrule
+Base $-1$ & $-7.8$ ($p = 0.04$) \\
+Base $-5$ & $-2.2$ ($p = 0.16$) \\
+\bottomrule
+\end{tabular}
+\end{column}
+\begin{column}{0.48\textwidth}
+\scriptsize
+\begin{itemize}
+\item Same base, same answer across estimators
+\item Caveat that moves the estimate the other way
+\end{itemize}
+\end{column}
+\end{columns}
+\takeaway{say what is established and what is not.}
+\end{frame}
+
+% -----------------------------------------------------------------------------
+\section{Next steps}
+
+% Pattern 7: data status
+\begin{frame}{Data built this month and what is still missing}
+\footnotesize
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{4.2cm}>{\raggedright\arraybackslash}p{5.2cm}>{\raggedright\arraybackslash}p{3.6cm}@{}}
+\toprule
+Source & Status & Use \\
+\midrule
+Source one & Parsed, months covered & Mechanism \\
+Source two & Requested; no reply yet & Timing \\
+\bottomrule
+\end{tabular}
+\takeaway{what the new data make possible, and the next gain.}
+\end{frame}
+
+% Pattern 7: plan
+\begin{frame}{Plan to the next milestone}
+\small
+\begin{tabular}{@{}lp{8.6cm}l@{}}
+\toprule
+Weeks & Tasks & Deliverable \\
+\midrule
+Weeks 1--2 & Task, task & Result \\
+Weeks 3--4 & Task & Result \\
+\bottomrule
+\end{tabular}
+\takeaway{by the milestone: the main result, its mechanism, and one extension.}
+\end{frame}
+
+\begin{frame}{Questions for discussion}
+\begin{enumerate}
+\item \textbf{Framing:} which result leads, and which are mechanism or extension?
+\item \textbf{Data:} which source to add first?
+\item \textbf{Inference:} how to present results that rest on few clusters?
+\end{enumerate}
+\end{frame}
+
+\end{document}
