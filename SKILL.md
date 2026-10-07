@@ -81,7 +81,11 @@ Use the Singapore theme's own colors; do not add a color theme or custom palette
 
 ## Workflow
 1. Copy `assets/slides_template.tex` into the project's slides or meeting folder (Overleaf-ready: `.tex` plus
-   `figures/*.pdf`). Name it `slides_<YYYY-MM-DD>.tex`.
+   `figures/*.pdf`). Name it `slides_<Short Title>-<YYYY-MM-DD>.tex` (type_title-date, e.g.
+   `slides_Regulatory Frictions and the retail pass-through-2026-10-07.tex`); compile the `.tex` so the PDF carries the
+   same name. Companion documents follow the same pattern (`meeting material_<Short Title>-<date>.tex`,
+   `proposal_<Short Title>-<date>.tex`). An update on a later date gets the new date; move the superseded file to an
+   `old version` folder.
 2. Take every number from the rendered paper tables or their CSVs; never retype from memory. When results change, update
    the slides in the same pass as the paper or proposal.
 3. Compile twice with `pdflatex -interaction=nonstopmode` (frame totals need the second pass).
